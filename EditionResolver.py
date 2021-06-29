@@ -506,7 +506,7 @@ class EditionResolver:
         def _currentLayerChanged(layer):
             self.dprint('_onCurrentLayerChanged')
             self.activeLayer = layer
-            if (not self.isLayerValid(layer)):
+            if (self.isLayerEditionActive(layer) and not self.isLayerValid(layer)):
                 self.showInvalidLayerMessages(layer)
         self.addListener(self.iface.mapCanvas(), self.iface.mapCanvas(
         ).currentLayerChanged, _currentLayerChanged)
