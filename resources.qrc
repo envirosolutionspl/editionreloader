@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plugins/EditionReloader" >
+        <file>icon.png</file>
+    </qresource>
+</RCC>
