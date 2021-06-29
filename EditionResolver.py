@@ -50,8 +50,12 @@ class EditionResolver:
             try:
                 signal.disconnect(callback)
             except Exception as ex:
-                self.dprint((ex, object, signal, callback))
-        del self.layers
+                self.dprint(('delete Exception signal.disconnect',
+                             ex, object, signal, callback))
+        try:
+            del self.layers
+        except Exception as ex:
+            self.dprint(('delete Exception: Could not del self.layers', ex))
 
     def addListener(self, object, signal, callback):
         signal.connect(callback)
