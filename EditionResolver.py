@@ -184,7 +184,7 @@ class EditionResolver:
             if (self.isLayerValid(layer)):
                 self.addLayerListeners(layer)
                 self.layers[layer] = None
-            else:
+            elif (self.isVectorLayer(layer)):
                 self.addLayerListenersForInvalidLayer(layer)
 
     def getLayersByName(self, name):
@@ -469,7 +469,7 @@ class EditionResolver:
         self.checkEditedFeatures(layer, callback)
 
     def isLayerValid(self, layer):
-        if (self.isFromDatabase(layer) and self.isSpatial(layer) and self.isPolygon(layer)):
+        if (self.isFromDatabase(layer) and self.isVectorLayer(layer) and self.isSpatial(layer) and self.isPolygon(layer)):
             self.dprint(('isLayerValid: layer is valid', layer))
             return True
         self.dprint(('isLayerValid: layer is not valid', layer))
@@ -483,6 +483,9 @@ class EditionResolver:
 
     def isPolygon(self, layer):
         return self.getLayerGeometryTypeName(layer).lower() == 'polygon'
+
+    def isVectorLayer(self, layer):
+        return isinstance(layer, QgsVectorLayer)
 
     def isLayerEditionActive(self, layer):
         return isinstance(layer.editBuffer(), QgsVectorLayerEditBuffer)
@@ -510,7 +513,7 @@ class EditionResolver:
         def _currentLayerChanged(layer):
             self.dprint('_onCurrentLayerChanged')
             self.activeLayer = layer
-            if (self.isLayerEditionActive(layer) and not self.isLayerValid(layer)):
+            if (self.isVectorLayer(layer) and self.isLayerEditionActive(layer) and not self.isLayerValid(layer)):
                 self.showInvalidLayerMessages(layer)
         self.addListener(self.iface.mapCanvas(), self.iface.mapCanvas(
         ).currentLayerChanged, _currentLayerChanged)
